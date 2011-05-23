@@ -1,3 +1,6 @@
+-- Adjust this setting to control where the objects get created.
+SET search_path = public;
+
 -- SHA-@SHATYPE@
 CREATE TYPE sha@SHATYPE@;
 CREATE FUNCTION sha@SHATYPE@_in (cstring) RETURNS sha@SHATYPE@ LANGUAGE c STRICT AS 'sha', 'sha_in@SHATYPE@';

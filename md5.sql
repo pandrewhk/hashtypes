@@ -1,3 +1,6 @@
+-- Adjust this setting to control where the objects get created.
+SET search_path = public;
+
 -- md5
 CREATE TYPE md5hash;
 CREATE FUNCTION md5_in (cstring) RETURNS md5hash LANGUAGE c STRICT AS 'sha', 'md5_in';
