@@ -1,0 +1,5 @@
+*.o
+*.so
+sha*.sql.in
+sha*.sql
+sha*.c
