@@ -1,23 +1,2 @@
-This module provides datatypes for storing SHA-1, SHA-2 and MD5 hashes.
-
-Installation:
-
-make
-make install
-make installcheck (optional)
-psql -f sha.sql $PGDATABASE.
-
-Usage:
-
-The module implements sha1, sha224, sha256, sha384 sha512 and md5hash
-datatypes You can apply basic comparison operators on these types and use them
-with indexes. Both btree and hash indexes are supported. See sql/sha.sql for
-usage examples.
-
-Removal:
-psql -f uninstall_sha.sql $PGDATABASE.
-
-Note:
-The name of the type for storing md5 hash values is md5hash to avoid conflicts
-with the internal function called md5.
-
+This extension is actually a fork of shatypes which adds some other data types
+as crc32 and provides some fixes to original implementations.

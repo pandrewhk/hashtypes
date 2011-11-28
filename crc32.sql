@@ -1,14 +1,16 @@
+set search_path = @extschema@;
+
 CREATE TYPE crc32;
 
 CREATE FUNCTION crc32_in(cstring) RETURNS crc32
 AS
-  'sha',
+  'hashtypes',
   'crc32_in'
 LANGUAGE C STRICT IMMUTABLE;
 
 CREATE FUNCTION crc32_out(crc32) RETURNS cstring
 AS
-  'sha',
+  'hashtypes',
   'crc32_out'
 LANGUAGE C STRICT IMMUTABLE;
 

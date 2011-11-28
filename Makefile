@@ -1,17 +1,22 @@
 # $PostgreSQL$
 
-MODULE_big = sha
-LN_OBJS = sha1.o sha224.o sha256.o sha384.o sha512.o
+HASHTYPESVERSION = 1.0
+MODULES = hashtypes
+EXTENSION = hashtypes
+DOCS = README
+MODULE_big = hashtypes
 OBJS = common.o md5.o crc32.o $(LN_OBJS)
-DATA_built = sha.sql
-DATA = uninstall_sha.sql
-REGRESS = sha
+DATA_built = hashtypes--$(HASHTYPESVERSION).sql
+REGRESS = regress_sha
 
 PG_CONFIG = pg_config
+
+LN_OBJS = sha1.o sha224.o sha256.o sha384.o sha512.o
+LN_SOURCES = $(subst .o,.c,$(LN_OBJS))
+
 PGXS := $(shell $(PG_CONFIG) --pgxs)
 include $(PGXS)
 
-LN_SOURCES = $(subst .o,.c,$(LN_OBJS))
 $(LN_SOURCES) : % : sha.c
 	rm -f $@ && $(LN_S) $< $@
 
@@ -21,7 +26,7 @@ clean-ln:
 	rm -f $(LN_SOURCES)
 
 clean-sql.in:
-	rm -f sha.sql.in
+	rm -f hashtypes--$(HASHTYPESVERSION).sql.in
 
 TYPES=1 224 256 384 512
 length_1=20
@@ -30,7 +35,7 @@ length_256=32
 length_384=48
 length_512=64
 
-sha.sql.in: sha.sql.type md5.sql crc32.sql
+hashtypes--$(HASHTYPESVERSION).sql.in: sha.sql.type md5.sql crc32.sql
 	> $@
 	$(foreach type,$(TYPES),sed -e "s/@SHATYPE@/$(type)/g" -e "s/@SHALENGTH@/$(length_$(type))/g" $< >> $@ ; )
 	cat md5.sql >> $@
