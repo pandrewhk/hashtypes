@@ -47,3 +47,9 @@ src/sha224.o: CFLAGS+=-DSHA_NAME=224 -DSHA_LENGTH=28
 src/sha256.o: CFLAGS+=-DSHA_NAME=256 -DSHA_LENGTH=32
 src/sha384.o: CFLAGS+=-DSHA_NAME=384 -DSHA_LENGTH=48
 src/sha512.o: CFLAGS+=-DSHA_NAME=512 -DSHA_LENGTH=64
+
+dist:
+	git archive --format zip \
+		--prefix=hashtypes-$(HASHTYPESVERSION)/ \
+		--output hashtypes-$(HASHTYPESVERSION).zip \
+		master
