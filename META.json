@@ -1,0 +1,25 @@
+{
+  "name": "hashtypes",
+  "abstract": "data types for sha{1,256,512}, md5 and crc32",
+  "version": "0.1.0",
+  "maintainer": "Andrey Popp <8mayday@gmail.com>",
+  "license": "postgresql",
+  "meta-spec": {
+    "version": "1.0.0",
+    "url": "http://pgxn.org/meta/spec.txt"
+  },
+  "resources": {
+    "bugtracker": {
+      "web": "http://github.com/infofarmer/hashtypes/issues/"
+    },
+    "repository": {
+      "url":  "git://github.com/infofarmer/hashtypes.git",
+      "web":  "http://github.com/infofarmer/hashtypes/",
+      "type": "git"
+    }
+  },
+  "tags": [
+    "datatype", "sha", "md5", "sha256",
+    "sha1", "sha512", "crc32", "hash"
+  ]
+}
