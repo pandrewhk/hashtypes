@@ -8,6 +8,12 @@
     "version": "1.0.0",
     "url": "http://pgxn.org/meta/spec.txt"
   },
+  "provides": {
+    "hashtypes": {
+      "file": "sql/hashtypes--0.1.sql",
+      "version": "0.1.0"
+    }
+  },
   "resources": {
     "bugtracker": {
       "web": "http://github.com/infofarmer/hashtypes/issues/"
