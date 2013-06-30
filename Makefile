@@ -3,7 +3,7 @@
 HASHTYPESVERSION = 0.1
 MODULES = hashtypes
 EXTENSION = hashtypes
-DOCS = README
+DOCS = README.hashtypes
 MODULE_big = hashtypes
 OBJS = src/common.o src/md5.o src/crc32.o $(LN_OBJS)
 DATA_built = sql/hashtypes--$(HASHTYPESVERSION).sql
