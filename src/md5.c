@@ -50,10 +50,22 @@ md5_in(PG_FUNCTION_ARGS)
 {
 	char   *arg = PG_GETARG_CSTRING(0);
 	Md5	   *output;
-	
+
 	output = (Md5 *) cstring_to_hexarr(arg, MD5_LENGTH, "MD5");
 
 	PG_RETURN_MD5(output);
+}
+
+PG_FUNCTION_INFO_V1(md5_recv);
+Datum
+md5_recv(PG_FUNCTION_ARGS)
+{
+    StringInfo buf = (StringInfo) PG_GETARG_POINTER(0);
+    Md5 *output = palloc(sizeof *output);
+    int i = 0;
+    for (; i < MD5_LENGTH; ++i)
+        output->bytes[i] =  pq_getmsgint(buf, 1);
+    PG_RETURN_MD5(output);
 }
 
 PG_FUNCTION_INFO_V1(text_to_md5);
@@ -80,6 +92,19 @@ md5_out(PG_FUNCTION_ARGS)
 	PG_RETURN_CSTRING(hexarr_to_cstring(value->bytes, MD5_LENGTH));
 }
 
+PG_FUNCTION_INFO_V1(md5_send);
+Datum
+md5_send(PG_FUNCTION_ARGS)
+{
+	Md5    *value = PG_GETARG_MD5(0);
+    StringInfoData buf;
+    int i = 0;
+    pq_begintypsend(&buf);
+    for (; i < MD5_LENGTH; ++i)
+        pq_sendint(&buf, value->bytes[i], 1);
+    PG_RETURN_BYTEA_P(pq_endtypsend(&buf));
+}
+
 PG_FUNCTION_INFO_V1(md5_to_text);
 Datum
 md5_to_text(PG_FUNCTION_ARGS)
@@ -90,7 +115,7 @@ md5_to_text(PG_FUNCTION_ARGS)
 
 	cstring = hexarr_to_cstring(value->bytes, MD5_LENGTH);
 	textval = DatumGetTextP(DirectFunctionCall1(textin, CStringGetDatum(cstring)));
-	
+
 	PG_RETURN_TEXT_P(textval);
 }
 

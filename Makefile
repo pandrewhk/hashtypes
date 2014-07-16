@@ -7,7 +7,7 @@ DOCS = README.hashtypes
 MODULE_big = hashtypes
 OBJS = src/common.o src/md5.o src/crc32.o $(LN_OBJS)
 DATA_built = sql/hashtypes--$(HASHTYPESVERSION).sql
-REGRESS = regress_sha
+REGRESS = regress_sha regress_binary
 
 PG_CONFIG = pg_config
 

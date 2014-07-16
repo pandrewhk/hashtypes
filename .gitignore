@@ -3,3 +3,7 @@
 sha*.sql.in
 sha*.sql
 sha*.c
+
+regression.diffs
+regression.out
+results/

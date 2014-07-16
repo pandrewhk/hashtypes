@@ -1,3 +1,4 @@
+#include "libpq/pqformat.h"
 
 extern unsigned char *cstring_to_hexarr(char *arg, int length, char *hashname);
 extern unsigned char *text_to_hexarr(text *arg, int length, char *hashname);
