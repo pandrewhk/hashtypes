@@ -2,12 +2,7 @@
 -- first, define the datatype.  Turn off echoing so that expected file
 -- does not depend on contents of sha.sql.
 --
-
-SET client_min_messages = warning;
-\set ECHO none
-\i sql/hashtypes--0.1.sql
-\set ECHO all
-RESET client_min_messages;
+CREATE extension hashtypes;
 
 CREATE TABLE sha (one sha1, two sha224);
 CREATE INDEX sha1s_b ON sha (one);
@@ -31,6 +26,6 @@ CREATE INDEX md5_id2 ON md5test USING hash(val);
 INSERT INTO md5test VALUES (md5('test')), (md5('another test'));
 
 SELECT val FROM md5test WHERE val <> md5('another test')::md5hash;
-SELECT val FROM md5test WHERE val = md5('another test')::md5hash; 
+SELECT val FROM md5test WHERE val = md5('another test')::md5hash;
 SELECT text(val) FROM md5test WHERE val < 'ffffffffffffffffffffffffffffffff';
 
