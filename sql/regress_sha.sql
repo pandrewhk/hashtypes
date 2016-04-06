@@ -5,7 +5,7 @@
 
 SET client_min_messages = warning;
 \set ECHO none
-\i sql/hashtypes--0.1.sql
+CREATE EXTENSION hashtypes;
 \set ECHO all
 RESET client_min_messages;
 
@@ -33,4 +33,8 @@ INSERT INTO md5test VALUES (md5('test')), (md5('another test'));
 SELECT val FROM md5test WHERE val <> md5('another test')::md5hash;
 SELECT val FROM md5test WHERE val = md5('another test')::md5hash; 
 SELECT text(val) FROM md5test WHERE val < 'ffffffffffffffffffffffffffffffff';
-
+CREATE TABLE md5test_after (val md5hash);
+COPY md5test TO '/tmp/tst' WITH (FORMAT binary);
+COPY md5test_after FROM '/tmp/tst' WITH (FORMAT binary);
+SELECT * FROM md5test;
+SELECT * FROM md5test_after;

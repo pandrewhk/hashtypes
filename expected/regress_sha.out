@@ -8,6 +8,7 @@ RESET client_min_messages;
 CREATE TABLE sha (one sha1, two sha224);
 CREATE INDEX sha1s_b ON sha (one);
 CREATE INDEX sha1s_h ON sha USING hash (two);
+WARNING:  hash indexes are not WAL-logged and their use is discouraged
 COPY sha FROM stdin;
 SET enable_seqscan TO off;
 SELECT two FROM sha WHERE one = 'da39a3ee5e6b4b0d3255bfef95601890afd80709';
@@ -34,6 +35,7 @@ SELECT text(one) FROM sha WHERE one >= '0000000000000000000000000000000000000000
 CREATE TABLE md5test (val md5hash);
 CREATE INDEX md5_id1 ON md5test (val);
 CREATE INDEX md5_id2 ON md5test USING hash(val);
+WARNING:  hash indexes are not WAL-logged and their use is discouraged
 INSERT INTO md5test VALUES (md5('test')), (md5('another test'));
 SELECT val FROM md5test WHERE val <> md5('another test')::md5hash;
                val                
@@ -49,6 +51,23 @@ SELECT val FROM md5test WHERE val = md5('another test')::md5hash;
 
 SELECT text(val) FROM md5test WHERE val < 'ffffffffffffffffffffffffffffffff';
                text               
+----------------------------------
+ 098f6bcd4621d373cade4e832627b4f6
+ 5e8862cd73694287ff341e75c95e3c6a
+(2 rows)
+
+CREATE TABLE md5test_after (val md5hash);
+COPY md5test TO '/tmp/tst' WITH (FORMAT binary);
+COPY md5test_after FROM '/tmp/tst' WITH (FORMAT binary);
+SELECT * FROM md5test;
+               val                
+----------------------------------
+ 098f6bcd4621d373cade4e832627b4f6
+ 5e8862cd73694287ff341e75c95e3c6a
+(2 rows)
+
+SELECT * FROM md5test_after;
+               val                
 ----------------------------------
  098f6bcd4621d373cade4e832627b4f6
  5e8862cd73694287ff341e75c95e3c6a
