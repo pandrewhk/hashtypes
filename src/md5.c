@@ -68,6 +68,11 @@ md5_recv(PG_FUNCTION_ARGS)
 
 	nbytes = buf->len - buf->cursor;
 	// check nbytes == 16
+	if (nbytes != MD5_LENGTH)
+		ereport(ERROR,
+				(errmsg("received incorrect length (expected %d bytes, got %d)",
+						MD5_LENGTH, nbytes)));
+
 	result = palloc(sizeof(Md5));
 
 	pq_copymsgbytes(buf, result->bytes, nbytes);
