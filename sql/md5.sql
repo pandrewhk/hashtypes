@@ -19,22 +19,28 @@ CREATE FUNCTION md5_hash(md5hash) RETURNS int IMMUTABLE LANGUAGE c STRICT AS 'ha
 
 CREATE OPERATOR <> ( PROCEDURE = md5_ne,
 	LEFTARG = md5hash, RIGHTARG = md5hash,
-	NEGATOR = =, RESTRICT = neqsel);
+	NEGATOR = =, COMMUTATOR= <>,
+	RESTRICT = neqsel, JOIN = neqjoinsel);
 CREATE OPERATOR > ( PROCEDURE = md5_gt,
 	LEFTARG = md5hash, RIGHTARG = md5hash,
-	COMMUTATOR = <, NEGATOR = <=);
+	COMMUTATOR = <, NEGATOR = <=,
+	RESTRICT = scalargtsel, JOIN = scalargtjoinsel);
 CREATE OPERATOR < ( PROCEDURE = md5_lt,
 	LEFTARG = md5hash, RIGHTARG = md5hash,
-	COMMUTATOR = >, NEGATOR = >=);
+	COMMUTATOR = >, NEGATOR = >=,
+	RESTRICT = scalarltsel, JOIN = scalarltjoinsel);
 CREATE OPERATOR >= ( PROCEDURE = md5_ge,
 	LEFTARG = md5hash, RIGHTARG = md5hash,
-	COMMUTATOR = <=, NEGATOR = <);
+	COMMUTATOR = <=, NEGATOR = <,
+	RESTRICT = scalargtsel, JOIN = scalargtjoinsel);
 CREATE OPERATOR <= ( PROCEDURE = md5_le,
 	LEFTARG = md5hash, RIGHTARG = md5hash,
-	COMMUTATOR = >=, NEGATOR = >);
+	COMMUTATOR = >=, NEGATOR = >,
+	RESTRICT = scalarltsel, JOIN = scalarltjoinsel);
 CREATE OPERATOR = ( PROCEDURE = md5_eq,
 	LEFTARG = md5hash, RIGHTARG = md5hash,
-	COMMUTATOR = =, NEGATOR = <>, RESTRICT = eqsel, HASHES, MERGES);
+	COMMUTATOR = =, NEGATOR = <>,
+	RESTRICT = eqsel, JOIN = eqjoinsel, HASHES, MERGES);
 
 CREATE OPERATOR CLASS md5hash_ops DEFAULT FOR TYPE md5hash USING btree AS
        OPERATOR 1 <, OPERATOR 2 <=, OPERATOR 3 =, OPERATOR 4 >=, OPERATOR 5 >,
@@ -42,13 +48,13 @@ CREATE OPERATOR CLASS md5hash_ops DEFAULT FOR TYPE md5hash USING btree AS
 CREATE OPERATOR CLASS md5hash_ops DEFAULT FOR TYPE md5hash USING hash AS
        OPERATOR 1 =, FUNCTION 1 md5_hash(md5hash);
 
-CREATE FUNCTION text(md5hash) RETURNS TEXT LANGUAGE C STRICT AS 'hashtypes', 'md5_to_text';
+CREATE FUNCTION text(md5hash) RETURNS TEXT LANGUAGE C IMMUTABLE STRICT AS 'hashtypes', 'md5_to_text';
 CREATE CAST (md5hash AS text) WITH FUNCTION text(md5hash) AS ASSIGNMENT;
 
-CREATE FUNCTION md5t(text) RETURNS md5hash LANGUAGE C STRICT AS 'hashtypes', 'text_to_md5';
+CREATE FUNCTION md5t(text) RETURNS md5hash LANGUAGE C IMMUTABLE STRICT AS 'hashtypes', 'text_to_md5';
 CREATE CAST (text AS md5hash) WITH FUNCTION md5t(text) AS ASSIGNMENT;
 
-CREATE FUNCTION md5b(bytea) RETURNS md5hash LANGUAGE C STRICT AS 'hashtypes', 'bytea_to_md5';
+CREATE FUNCTION md5b(bytea) RETURNS md5hash LANGUAGE C IMMUTABLE STRICT AS 'hashtypes', 'bytea_to_md5';
 CREATE CAST (bytea AS md5hash) WITH FUNCTION md5b(bytea) AS ASSIGNMENT;
-CREATE FUNCTION bytea(md5hash) RETURNS bytea LANGUAGE C STRICT AS 'hashtypes', 'md5_to_bytea';
+CREATE FUNCTION bytea(md5hash) RETURNS bytea LANGUAGE C IMMUTABLE STRICT AS 'hashtypes', 'md5_to_bytea';
 CREATE CAST (md5hash AS bytea) WITH FUNCTION bytea(md5hash) AS ASSIGNMENT;

@@ -1,0 +1,16 @@
+UPDATE pg_catalog.pg_operator o
+SET oprrest=l.oprrest, oprjoin = l.oprjoin
+FROM( VALUES
+    ('<>', 'md5hash', 'md5hash', 'neqsel'::regproc, 'neqjoinsel'::regproc ),
+    ('>', 'md5hash', 'md5hash', 'scalargtsel', 'scalargtjoinsel' ),
+    ('<', 'md5hash', 'md5hash', 'scalarltsel', 'scalarltjoinsel' ),
+    ('>=', 'md5hash', 'md5hash', 'scalargtsel', 'scalargtjoinsel' ),
+    ('<=', 'md5hash', 'md5hash', 'scalarltsel', 'scalarltjoinsel' ),
+    ('=', 'md5hash', 'md5hash', 'eqsel', 'eqjoinsel' )
+) l(oprname, oprleft, oprright, oprrest,oprjoin),
+pg_catalog.pg_type tr,
+pg_catalog.pg_type tl
+WHERE o.oprname=l.oprname
+AND tr.typname=l.oprright
+AND tl.typname=l.oprleft
+AND o.oprleft=tr.oid AND o.oprright=tl.oid;
