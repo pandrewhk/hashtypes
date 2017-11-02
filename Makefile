@@ -6,9 +6,9 @@ EXTENSION = hashtypes
 DOCS = README.hashtypes
 MODULE_big = hashtypes
 OBJS = src/common.o src/md5.o src/crc32.o $(LN_OBJS)
-DATA = $(wildcard sql/*--*.sql)
 DATA_built = sql/hashtypes--$(HASHTYPESVERSION).sql sql/hashtypes--0.1.2--0.1.3.sql
-REGRESS = regress_sha
+DATA = $(filter-out $(DATA_built), $(wildcard sql/*--*.sql))
+REGRESS = regress_sha regress_sha_upgrade
 
 PG_CONFIG = pg_config
 
