@@ -4,12 +4,15 @@
 --
 
 \set ECHO none
+\set VERBOSITY terse
+SET client_min_messages = error;
 drop extension if exists hashtypes cascade;;
 drop schema public cascade;
 create schema public;
-SET client_min_messages = error;
 CREATE EXTENSION hashtypes version '0.1.2';
 ALTER EXTENSION hashtypes update;
+--set client_min_messages = 'notice';
+\set VERBOSITY default
 \set ECHO all
 
 CREATE TABLE sha (one sha1, two sha224);
