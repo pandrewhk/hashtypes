@@ -11,16 +11,22 @@ matrix:
        install:
            - sudo apt-get install postgresql-server-dev-9.4
            - sudo make install
+       env:
+           - PostgreSQL=9.4
      - addons: 
           postgresql: 9.5
        install:
            - sudo apt-get install postgresql-server-dev-9.5
            - sudo make install
+       env:
+           - PostgreSQL=9.5
      - addons: 
           postgresql: 9.6
        install:
            - sudo apt-get install postgresql-server-dev-9.6
            - sudo make install
+       env:
+           - PostgreSQL=9.6
      - # addons: postgresql: 10
        install:
            - wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
@@ -32,9 +38,9 @@ matrix:
            - sudo pg_ctlcluster 10 main restart
            - sudo -u postgres psql  -c "create user travis with superuser";
            - sudo make install
+       env:
+           - PostgreSQL=10
 
-env:
-  - COVERAGE=1 RELEASE_TESTING=1 DB_TESTING=1
 script:
   - make installcheck
 after_failure:
