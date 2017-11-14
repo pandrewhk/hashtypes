@@ -1,0 +1,6 @@
+ALTER OPERATOR <> (md5hash, md5hash) SET (RESTRICT = neqsel, JOIN = neqjoinsel);
+ALTER OPERATOR > (md5hash, md5hash) SET (RESTRICT = scalargtsel, JOIN = scalargtjoinsel);
+ALTER OPERATOR < (md5hash, md5hash) SET (RESTRICT = scalarltsel, JOIN = scalarltjoinsel);
+ALTER OPERATOR >= (md5hash, md5hash) SET (RESTRICT = scalargtsel, JOIN = scalargtjoinsel);
+ALTER OPERATOR <= (md5hash, md5hash) SET (RESTRICT = scalarltsel, JOIN = scalarltjoinsel);
+ALTER OPERATOR = (md5hash, md5hash) SET (RESTRICT = eqsel, JOIN = eqjoinsel);

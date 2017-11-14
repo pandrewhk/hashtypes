@@ -2,7 +2,6 @@
 -- first, define the datatype.  Turn off echoing so that expected file
 -- does not depend on contents of sha.sql.
 --
-SET client_min_messages = error;
 \set ECHO none
 CREATE TABLE sha (one sha1, two sha224);
 CREATE INDEX sha1s_b ON sha (one);
