@@ -56,7 +56,7 @@ CREATE FUNCTION md5hash(text) RETURNS md5hash LANGUAGE C IMMUTABLE STRICT AS 'ha
 CREATE CAST (text AS md5hash) WITH FUNCTION md5t(text) AS ASSIGNMENT;
 
 CREATE FUNCTION md5b(bytea) RETURNS md5hash LANGUAGE C IMMUTABLE STRICT AS 'hashtypes', 'bytea_to_md5';
-CREATE FUNCTION md5hash(bytea) RETURNS md5hash langauge C IMMUTABLE STRICT AS 'hashtypes', 'bytea_to_md5';
+CREATE FUNCTION md5hash(bytea) RETURNS md5hash language C IMMUTABLE STRICT AS 'hashtypes', 'bytea_to_md5';
 CREATE CAST (bytea AS md5hash) WITH FUNCTION md5b(bytea) AS ASSIGNMENT;
 CREATE FUNCTION bytea(md5hash) RETURNS bytea LANGUAGE C IMMUTABLE STRICT AS 'hashtypes', 'md5_to_bytea';
 CREATE CAST (md5hash AS bytea) WITH FUNCTION bytea(md5hash) AS ASSIGNMENT;
