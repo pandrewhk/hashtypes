@@ -17,6 +17,9 @@ BEGIN
 END;
 $$; 
 
+-- this has to be run after pg upgrade too so not assuming the functions are missing
+CREATE FUNCTION if not exists md5hash(text) RETURNS md5hash LANGUAGE C IMMUTABLE STRICT AS 'hashtypes', 'text_to_md5';
+CREATE FUNCTION if not exists md5hash(bytea) RETURNS md5hash language C IMMUTABLE STRICT AS 'hashtypes', 'bytea_to_md5';
 DO $$
 DECLARE version_num integer;
 BEGIN
