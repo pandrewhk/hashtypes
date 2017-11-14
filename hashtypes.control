@@ -1,4 +1,4 @@
 comment = 'A set of data types for various hashes and control sums'
-default_version = '0.1.3'
+default_version = '0.1.4'
 encoding = 'utf8'
 superuser = true

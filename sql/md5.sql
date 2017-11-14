@@ -52,9 +52,38 @@ CREATE FUNCTION text(md5hash) RETURNS TEXT LANGUAGE C IMMUTABLE STRICT AS 'hasht
 CREATE CAST (md5hash AS text) WITH FUNCTION text(md5hash) AS ASSIGNMENT;
 
 CREATE FUNCTION md5t(text) RETURNS md5hash LANGUAGE C IMMUTABLE STRICT AS 'hashtypes', 'text_to_md5';
+CREATE FUNCTION md5hash(text) RETURNS md5hash LANGUAGE C IMMUTABLE STRICT AS 'hashtypes', 'text_to_md5';
 CREATE CAST (text AS md5hash) WITH FUNCTION md5t(text) AS ASSIGNMENT;
 
 CREATE FUNCTION md5b(bytea) RETURNS md5hash LANGUAGE C IMMUTABLE STRICT AS 'hashtypes', 'bytea_to_md5';
+CREATE FUNCTION md5hash(bytea) RETURNS md5hash langauge C IMMUTABLE STRICT AS 'hashtypes', 'bytea_to_md5';
 CREATE CAST (bytea AS md5hash) WITH FUNCTION md5b(bytea) AS ASSIGNMENT;
 CREATE FUNCTION bytea(md5hash) RETURNS bytea LANGUAGE C IMMUTABLE STRICT AS 'hashtypes', 'md5_to_bytea';
 CREATE CAST (md5hash AS bytea) WITH FUNCTION bytea(md5hash) AS ASSIGNMENT;
+
+DO $$
+DECLARE version_num integer;
+BEGIN
+ SELECT current_setting('server_version_num') INTO STRICT version_num;
+ IF version_num > 90600 THEN
+  EXECUTE $E$ ALTER FUNCTION md5_in(cstring) PARALLEL SAFE $E$;
+  EXECUTE $E$ ALTER FUNCTION md5_out(md5hash) PARALLEL SAFE $E$;
+  EXECUTE $E$ ALTER FUNCTION md5_send(md5hash) PARALLEL SAFE $E$;
+  EXECUTE $E$ ALTER FUNCTION md5_recv(internal) PARALLEL SAFE $E$;
+  EXECUTE $E$ ALTER FUNCTION md5_lt(md5hash,md5hash) PARALLEL SAFE $E$;
+  EXECUTE $E$ ALTER FUNCTION md5_le(md5hash,md5hash) PARALLEL SAFE $E$;
+  EXECUTE $E$ ALTER FUNCTION md5_eq(md5hash,md5hash) PARALLEL SAFE $E$;
+  EXECUTE $E$ ALTER FUNCTION md5_gt(md5hash,md5hash) PARALLEL SAFE $E$;
+  EXECUTE $E$ ALTER FUNCTION md5_ge(md5hash,md5hash) PARALLEL SAFE $E$;
+  EXECUTE $E$ ALTER FUNCTION md5_ne(md5hash,md5hash) PARALLEL SAFE $E$;
+  EXECUTE $E$ ALTER FUNCTION md5_cmp(md5hash,md5hash) PARALLEL SAFE $E$;
+  EXECUTE $E$ ALTER FUNCTION md5_hash(md5hash) PARALLEL SAFE $E$;
+  EXECUTE $E$ ALTER FUNCTION md5hash(text) PARALLEL SAFE $E$;
+  EXECUTE $E$ ALTER FUNCTION md5hash(bytea) PARALLEL SAFE $E$;
+  EXECUTE $E$ ALTER FUNCTION md5t(text) PARALLEL SAFE $E$;
+  EXECUTE $E$ ALTER FUNCTION md5b(bytea) PARALLEL SAFE $E$;
+  EXECUTE $E$ ALTER FUNCTION text(md5hash) PARALLEL SAFE $E$;
+  EXECUTE $E$ ALTER FUNCTION bytea(md5hash) PARALLEL SAFE $E$;
+ END IF;
+END;
+$$; 
