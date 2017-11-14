@@ -1,0 +1,4 @@
+Changes since 0.1.1:
+
+  1.  Join operations now provide correct estimates
+  2.  Functions correctly marked immutable when immutable
