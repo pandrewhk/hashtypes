@@ -8,8 +8,11 @@ MODULE_big = hashtypes
 OBJS = src/common.o src/md5.o src/crc32.o $(LN_OBJS)
 DATA_built = sql/hashtypes--$(HASHTYPESVERSION).sql sql/hashtypes--0.1.2--0.1.3.sql
 DATA = $(filter-out $(DATA_built), $(wildcard sql/*--*.sql))
-REGRESS = regress_sha regress_sha_upgrade
+REGRESS = regress_sha regress_sha_upgrade parallel_test
 
+ifeq ($(shell test $(VERSION_NUM) -lt 90600; echo $$?),0)
+REGRESS := $(filter-out parallel_test, $(REGRESS))
+endif
 PG_CONFIG = pg_config
 
 LN_OBJS = src/sha1.o src/sha224.o src/sha256.o src/sha384.o src/sha512.o
