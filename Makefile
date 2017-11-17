@@ -10,9 +10,6 @@ DATA_built = sql/hashtypes--$(HASHTYPESVERSION).sql sql/hashtypes--0.1.2--0.1.3.
 DATA = $(filter-out $(DATA_built), $(wildcard sql/*--*.sql))
 REGRESS = regress_sha regress_sha_upgrade parallel_test
 
-ifeq ($(shell test $(VERSION_NUM) -lt 90600; echo $$?),0)
-REGRESS := $(filter-out parallel_test, $(REGRESS))
-endif
 PG_CONFIG = pg_config
 
 LN_OBJS = src/sha1.o src/sha224.o src/sha256.o src/sha384.o src/sha512.o
@@ -21,6 +18,10 @@ LN_SOURCES = $(subst .o,.c,$(LN_OBJS))
 PGXS := $(shell $(PG_CONFIG) --pgxs)
 
 include $(PGXS)
+
+ifeq ($(shell test $(VERSION_NUM) -lt 90600; echo $$?),0)
+REGRESS := $(filter-out parallel_test, $(REGRESS))
+endif
 
 ifeq ($(shell test $(VERSION_NUM) -ge 90600; echo $$?),0)
   	ALTEROP = alter_op
