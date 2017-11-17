@@ -8,7 +8,7 @@ MODULE_big = hashtypes
 OBJS = src/common.o src/md5.o src/crc32.o $(LN_OBJS)
 DATA_built = sql/hashtypes--$(HASHTYPESVERSION).sql sql/hashtypes--0.1.2--0.1.3.sql
 DATA = $(filter-out $(DATA_built), $(wildcard sql/*--*.sql))
-REGRESS = regress_sha regress_sha_upgrade
+REGRESS = regress_sha regress_sha_upgrade parallel_test
 
 PG_CONFIG = pg_config
 
@@ -18,6 +18,10 @@ LN_SOURCES = $(subst .o,.c,$(LN_OBJS))
 PGXS := $(shell $(PG_CONFIG) --pgxs)
 
 include $(PGXS)
+
+ifeq ($(shell test $(VERSION_NUM) -lt 90600; echo $$?),0)
+REGRESS := $(filter-out parallel_test, $(REGRESS))
+endif
 
 ifeq ($(shell test $(VERSION_NUM) -ge 90600; echo $$?),0)
   	ALTEROP = alter_op
