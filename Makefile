@@ -10,7 +10,7 @@ DATA_built = sql/hashtypes--$(HASHTYPESVERSION).sql sql/hashtypes--0.1.2--0.1.3.
 DATA = $(filter-out $(DATA_built), $(wildcard sql/*--*.sql))
 REGRESS = regress_sha regress_sha_upgrade parallel_test
 
-PG_CONFIG = pg_config
+PG_CONFIG ?= pg_config
 
 LN_OBJS = src/sha1.o src/sha224.o src/sha256.o src/sha384.o src/sha512.o
 LN_SOURCES = $(subst .o,.c,$(LN_OBJS))
