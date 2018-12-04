@@ -1,49 +1,69 @@
 sudo: required
-addons:
-   postgresql: 
-        - "9.4"
-        - "9.5"
-        - "9.6"
+dist: xenial
+language: c
 matrix:
    include:
      - addons: 
-          postgresql: 9.4
-       install:
-           - sudo apt-get install postgresql-server-dev-9.4
-           - sudo make install
+          postgresql: 9.3
+          apt:
+            packages:
+               - postgresql-9.3
+               - postgresql-client-9.3
+               - postgresql-server-dev-9.3
        env:
-           - PostgreSQL=9.4
+          - POSTGRESQL=9.3
+          - PGPORT=5433
+       install:
+           - sudo make install
+     - addons: 
+          postgresql: 9.4
+          apt:
+            packages:
+               - postgresql-server-dev-9.4
+       env:
+          - POSTGRESQL=9.4
+       install:
+           - sudo make install
      - addons: 
           postgresql: 9.5
-       install:
-           - sudo apt-get install postgresql-server-dev-9.5
-           - sudo make install
+          apt:
+            packages:
+               - postgresql-server-dev-9.5
        env:
-           - PostgreSQL=9.5
-     - addons: 
+          - POSTGRESQL=9.5
+       install:
+           - sudo make install
+     - addons:
           postgresql: 9.6
-       install:
-           - sudo apt-get install postgresql-server-dev-9.6
-           - sudo make install
+          apt:
+            packages:
+               - postgresql-server-dev-9.6
        env:
-           - PostgreSQL=9.6
-     - # addons: postgresql: 10
+          - POSTGRESQL=9.6
        install:
-           - sudo pg_ctlcluster 9.2 main restart
-           - sudo pg_ctlcluster 9.2 main stop
-           - wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
-           - sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
-           - sudo apt-get update
-           - sudo apt-get install postgresql-10 postgresql-contrib-10 postgresql-client-10
-           - sudo apt-get install postgresql-server-dev-10
-           - sudo sh -c 'echo "port=5432" >> /etc/postgresql/10/main/postgresql.conf'
-           - sudo pg_ctlcluster 10 main restart
-           - sudo -u postgres psql  -c "create user travis with superuser";
            - sudo make install
+     - addons:
+          postgresql: 10
+          apt:
+            packages:
+               - postgresql-server-dev-10
        env:
-           - PostgreSQL=10
-
+          - POSTGRESQL=10
+       install:
+           - sudo make install
+     - addons:
+          postgresql: 11
+          apt:
+            packages:
+               - postgresql-11
+               - postgresql-client-11
+               - postgresql-server-dev-11
+       env:
+          - POSTGRESQL=11
+          - PGPORT=5433
+       install:
+         - sudo make install
 script:
   - make installcheck
 after_failure:
-  - cat /home/travis/build/adjust/hashtypes/regression.diffs
+  - cat regression.diffs
