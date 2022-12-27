@@ -12,7 +12,7 @@
 #include "common.h"
 #include "fmgr.h"
 #include "utils/builtins.h"
-
+#include "libpq/pqformat.h"
 
 #define MD5_LENGTH	16
 
@@ -27,6 +27,8 @@ typedef struct Md5 {
 
 Datum md5_in(PG_FUNCTION_ARGS);
 Datum md5_out(PG_FUNCTION_ARGS);
+Datum md5_recv(PG_FUNCTION_ARGS);
+Datum md5_send(PG_FUNCTION_ARGS);
 Datum md5_to_text(PG_FUNCTION_ARGS);
 Datum text_to_md5(PG_FUNCTION_ARGS);
 Datum bytea_to_md5(PG_FUNCTION_ARGS);
@@ -56,6 +58,28 @@ md5_in(PG_FUNCTION_ARGS)
 	PG_RETURN_MD5(output);
 }
 
+PG_FUNCTION_INFO_V1(md5_recv);
+Datum
+md5_recv(PG_FUNCTION_ARGS)
+{
+	StringInfo	buf = (StringInfo) PG_GETARG_POINTER(0);
+	Md5	   		*result;
+	int			nbytes;
+
+	nbytes = buf->len - buf->cursor;
+	// check nbytes == 16
+	if (nbytes != MD5_LENGTH)
+		ereport(ERROR,
+				(errmsg("received incorrect length (expected %d bytes, got %d)",
+						MD5_LENGTH, nbytes)));
+
+	result = palloc(sizeof(Md5));
+
+	pq_copymsgbytes(buf, result->bytes, nbytes);
+
+	PG_RETURN_MD5(result);
+}
+
 PG_FUNCTION_INFO_V1(text_to_md5);
 Datum
 text_to_md5(PG_FUNCTION_ARGS)
@@ -78,6 +102,15 @@ md5_out(PG_FUNCTION_ARGS)
 	Md5    *value = PG_GETARG_MD5(0);
 
 	PG_RETURN_CSTRING(hexarr_to_cstring(value->bytes, MD5_LENGTH));
+}
+
+PG_FUNCTION_INFO_V1(md5_send);
+Datum
+md5_send(PG_FUNCTION_ARGS)
+{
+	Md5    *value = PG_GETARG_MD5(0);
+
+	PG_RETURN_BYTEA_P(hexarr_to_bytea(value->bytes, MD5_LENGTH));
 }
 
 PG_FUNCTION_INFO_V1(md5_to_text);

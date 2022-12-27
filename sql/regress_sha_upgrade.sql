@@ -3,9 +3,16 @@
 -- does not depend on contents of sha.sql.
 --
 
-SET client_min_messages = error;
 \set ECHO none
-CREATE EXTENSION hashtypes;
+\set VERBOSITY terse
+SET client_min_messages = error;
+drop extension if exists hashtypes cascade;;
+drop schema public cascade;
+create schema public;
+CREATE EXTENSION hashtypes version '0.1.2';
+ALTER EXTENSION hashtypes update;
+--set client_min_messages = 'notice';
+\set VERBOSITY default
 \set ECHO all
 
 CREATE TABLE sha (one sha1, two sha224);

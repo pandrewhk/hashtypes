@@ -1,0 +1,5 @@
+ALTER FUNCTION sha1(bytea) RENAME TO sha1b;
+ALTER FUNCTION sha224(bytea) RENAME to sha224b;
+ALTER FUNCTION sha384(bytea) RENAME to sha384b;
+ALTER FUNCTION sha512(bytea) RENAME TO sha512b;
+
