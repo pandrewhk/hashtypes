@@ -1,8 +1,0 @@
-This extension is actually a fork of shatypes[1] which adds some other data types
-as crc32 and provides some fixes to original implementations.
-
-This project is a continuation of the project formerly at https://github.com/infofarmer/hashtypes.
-Many thanks to Andrey Ropp, Infofarmer, and others for their work and support on the transition.[2]
-
-[1]: http://pgfoundry.org/projects/shatypes
-[2]: https://github.com/infofarmer/hashtypes/issues/7
