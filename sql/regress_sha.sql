@@ -37,3 +37,9 @@ COPY md5test TO '/tmp/tst' WITH (FORMAT binary);
 COPY md5test_after FROM '/tmp/tst' WITH (FORMAT binary);
 SELECT * FROM md5test;
 SELECT * FROM md5test_after;
+
+CREATE TABLE crc32test (val crc32);
+INSERT INTO crc32test VALUES ('ab1'::crc32), ('ab2'::crc32);
+
+SELECT val FROM crc32test WHERE val <> 'ab2'::crc32;
+SELECT val FROM crc32test WHERE val = 'ab2'::crc32;

@@ -70,3 +70,17 @@ SELECT * FROM md5test_after;
  5e8862cd73694287ff341e75c95e3c6a
 (2 rows)
 
+CREATE TABLE crc32test (val crc32);
+INSERT INTO crc32test VALUES ('ab1'::crc32), ('ab2'::crc32);
+SELECT val FROM crc32test WHERE val <> 'ab2'::crc32;
+   val    
+----------
+ 00000ab1
+(1 row)
+
+SELECT val FROM crc32test WHERE val = 'ab2'::crc32;
+   val    
+----------
+ 00000ab2
+(1 row)
+
