@@ -1,19 +1,32 @@
 {
   "name": "hashtypes",
   "abstract": "data types for sha{1,256,512}, md5 and crc32",
-  "version": "0.1.4",
-  "maintainer": ["Chris Travers <chris.travers@adjust.com>", "Manuel Kniep <rapimo@adjust.com>"],
-  "license": "postgresql",
+  "version": "0.1.5",
+  "maintainer" : [
+      "adjustgmbh"
+   ],
+  "license": {
+      "PostgreSQL": "http://www.postgresql.org/about/licence"
+   },
+  "provides": {
+    "hashtypes": {
+      "file": "sql/hashtypes--0.1.5.sql",
+      "version": "0.1.5",
+      "abstract": "data types for sha{1,256,512}, md5 and crc32"
+    }
+  },
   "meta-spec": {
     "version": "1.0.0",
     "url": "http://pgxn.org/meta/spec.txt"
   },
-  "provides": {
-    "hashtypes": {
-      "file": "sql/hashtypes--0.1.4.sql",
-      "version": "0.1.4"
-    }
-  },
+  "description": "data types for sha{1,256,512}, md5 and crc32",
+   "prereqs": {
+      "runtime": {
+        "requires": {
+           "PostgreSQL": "10.0.0"
+        }
+      }
+   },
   "resources": {
     "bugtracker": {
       "web": "http://github.com/adjust/hashtypes/issues/"
